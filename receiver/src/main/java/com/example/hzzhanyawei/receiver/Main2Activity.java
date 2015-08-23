@@ -1,17 +1,21 @@
 package com.example.hzzhanyawei.receiver;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.net.InterfaceAddress;
+
 public class Main2Activity extends BaseActivity implements View.OnClickListener {
 
     private Button bt_offline;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,3 +52,5 @@ public class Main2Activity extends BaseActivity implements View.OnClickListener 
         sendBroadcast(intent);
     }
 }
+
+
