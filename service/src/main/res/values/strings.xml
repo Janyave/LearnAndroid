@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Service</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_thread_test">ThreadTest</string>
+    <string name="title_activity_service_test">ServiceTest</string>
+</resources>

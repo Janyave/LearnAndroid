@@ -1,1 +1,1 @@
-include ':app', ':fragment', ':receiver', ':datasave'
+include ':app', ':fragment', ':receiver', ':datasave', ':notification', ':service'
