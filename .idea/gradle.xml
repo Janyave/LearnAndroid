@@ -13,9 +13,11 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/datasave" />
             <option value="$PROJECT_DIR$/fragment" />
+            <option value="$PROJECT_DIR$/internet" />
             <option value="$PROJECT_DIR$/notification" />
             <option value="$PROJECT_DIR$/receiver" />
             <option value="$PROJECT_DIR$/service" />
+            <option value="$PROJECT_DIR$/testsoftkeyboard" />
           </set>
         </option>
       </GradleProjectSettings>

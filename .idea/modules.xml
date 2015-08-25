@@ -6,9 +6,11 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/datasave/datasave.iml" filepath="$PROJECT_DIR$/datasave/datasave.iml" />
       <module fileurl="file://$PROJECT_DIR$/fragment/fragment.iml" filepath="$PROJECT_DIR$/fragment/fragment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/internet/internet.iml" filepath="$PROJECT_DIR$/internet/internet.iml" />
       <module fileurl="file://$PROJECT_DIR$/notification/notification.iml" filepath="$PROJECT_DIR$/notification/notification.iml" />
       <module fileurl="file://$PROJECT_DIR$/receiver/receiver.iml" filepath="$PROJECT_DIR$/receiver/receiver.iml" />
       <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testsoftkeyboard/testsoftkeyboard.iml" filepath="$PROJECT_DIR$/testsoftkeyboard/testsoftkeyboard.iml" />
     </modules>
   </component>
 </project>

@@ -1,1 +1,1 @@
-include ':app', ':fragment', ':receiver', ':datasave', ':notification', ':service'
+include ':app', ':fragment', ':receiver', ':datasave', ':notification', ':service', ':internet', ':testsoftkeyboard'
