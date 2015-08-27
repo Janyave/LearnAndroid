@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ll_main = (LinearLayout) findViewById(R.id.ll_main);
 
-        et_input = (EditText) findViewById(R.id.et_input);
-        tv_show = (TextView) findViewById(R.id.tv_show);
+        //et_input = (EditText) findViewById(R.id.et_input);
+        //tv_show = (TextView) findViewById(R.id.tv_show);
         bt_show = (Button) findViewById(R.id.bt_show_keyboard);
         bt_hide = (Button) findViewById(R.id.bt_hide_keyboard);
 
@@ -45,18 +45,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onGlobalLayout() {
+                View rootview = getWindow().getDecorView();
                 Rect r = new Rect();
-                View rootview = getWindow().getDecorView(); // 获取显示屏最顶层View
                 rootview.getWindowVisibleDisplayFrame(r);
-
-                int screenHeight = rootview.getHeight();//getWindowManager().getDefaultDisplay().getHeight();
+                int screenHeight = rootview.getHeight();
                 int heightDifference = screenHeight - r.bottom;
-                Log.d("Keyboard Size", "______________________________________________");
-                Log.d("Keyboard Size", "top" + r.top);
-                Log.d("Keyboard Size", "bottom" + r.bottom);
-                Log.d("Keyboard Size", "total height" + screenHeight);
-                Log.d("Keyboard Size", "______________________________________________");
-
                 if(heightDifference > 100) {
                     Log.d("Keyboard Size", "Size: " + heightDifference);
                 }

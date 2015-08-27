@@ -12,12 +12,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.hzzhanyawei.internet.Util.HTTPUtil;
+import com.google.gson.Gson;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -27,9 +38,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.ContentHandler;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -92,7 +108,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.bt_httpurl:
                 //sendRequestWithHttpUrlConnection();
-                sendRequestWithHttpClientConnection();
+               HTTPUtil.sendRequestWithHttpUrlConnection("http://10.240.155.13/test.json", new HTTPUtil.HttpCallbackListener() {
+                   @Override
+                   public void onFinish(String response) {
+                       praseJsonWithGson(response);
+                   }
+
+                   @Override
+                   public void onError(Exception e) {
+
+                   }
+               });
                 break;
             case R.id.bt_prase:
                 break;
@@ -145,13 +171,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 try {
                     HttpClient httpClient = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet("http://www.baidu.com");
+                    HttpGet httpGet = new HttpGet("http://10.240.155.13/test.json");
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     if(httpResponse.getStatusLine().getStatusCode() == 200){
                         HttpEntity httpEntity = httpResponse.getEntity();
                         String response = EntityUtils.toString(httpEntity);
 
-                        praseXMLWithPull(response);
+                        //praseXMLWithSAX(response);
+                        //praseJsonWithJsonObject(response);
+                        praseJsonWithGson(response);
 
                         Message msg = new Message();
                         msg.what = MSG_HTTPCLIENT;
@@ -165,8 +193,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
 
+
+    private void praseJsonWithJsonObject(String jsonData){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            JSONArray array = jsonObject.getJSONArray("first");
+            for(int i = 0; i < array.length(); i++){
+                JSONObject object = array.getJSONObject(i);
+                String id = object.getString("id");
+                String name = object.getString("name");
+                String version = object.getString("version");
+                Log.d(DEBUG, "id is " + id);
+                Log.d(DEBUG, "name is " + name);
+                Log.d(DEBUG, "version is " + version);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void praseJsonWithGson(String jsonData){
+        Gson gson = new Gson();
+        JsonContainer container = gson.fromJson(jsonData, JsonContainer.class);
+
+        Log.d(DEBUG, "结果是： " + container.toString());
+
+    }
+
+
+
     private void praseXMLWithPull(String xmlData){
         try {
+
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new StringReader(xmlData));
@@ -203,6 +261,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void praseXMLWithSAX(String xmlData){
+
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            XMLReader reader = factory.newSAXParser().getXMLReader();
+            XMLHandler handler = new XMLHandler();
+
+            reader.setContentHandler(handler);
+            reader.parse(new InputSource(new StringReader(xmlData)));
+
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     class MyHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
@@ -219,6 +296,110 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 default:
                     break;
             }
+        }
+    }
+
+    class XMLHandler extends DefaultHandler{
+
+        private String nodeName;
+        private StringBuilder id;
+        private StringBuilder name;
+        private StringBuilder version;
+
+        @Override
+        public void startDocument() throws SAXException {
+           //Log.d(DEBUG, "start document");
+            id = new StringBuilder();
+            name = new StringBuilder();
+            version = new StringBuilder();
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            //Log.d(DEBUG, "start element and now node name is "+ localName);
+            nodeName = localName;//记录当前节点名
+        }
+
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            if ("id".equals(nodeName)){
+                id.append(ch, start, length);
+            } else if ("name".equals(name)){
+                name.append(ch, start, length);
+            } else if ("version".equals(nodeName)){
+                version.append(ch, start, length);
+            }
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            //Log.d(DEBUG, "end element and the element is "+ localName);
+            if ("app".equals(localName)) {
+                Log.d(DEBUG, "id is " + id);
+                Log.d(DEBUG, "name is " + name);
+                Log.d(DEBUG, "version is " + version);
+                id.setLength(0);
+                name.setLength(0);
+                version.setLength(0);
+            }
+        }
+
+        @Override
+        public void endDocument() throws SAXException {
+            super.endDocument();
+        }
+    }
+}
+
+class JsonContainer{
+
+    private List<Frist> first;
+
+    public List<Frist> getFrist() {
+        return first;
+    }
+
+    public void setFrist(List<Frist> frist) {
+        this.first = first;
+    }
+
+    @Override
+    public String toString() {
+        return "{first:" + first + "}";
+    }
+
+    class Frist{
+        private String id;
+        private String name;
+        private String version;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        @Override
+        public String toString() {
+            return "{id:" + id + ",name:" + name + ",version:" + version +"}";
         }
     }
 }

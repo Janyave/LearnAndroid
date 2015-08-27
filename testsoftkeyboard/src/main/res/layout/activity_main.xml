@@ -18,19 +18,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/bt_hide_keyboard"
         android:text="Keyboard hide"/>
-    <TextView
-        android:id="@+id/tv_show"
+    <com.example.hzzhanyawei.testsoftkeyboard.MyEditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="height"
-        android:layout_marginTop="200dp"/>
+        android:layout_height="40dp"
+        android:background="#00ff00"
+        />
 
-    <EditText
-        android:id="@+id/et_input"
-        android:hint="please input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00ff00"/>
+    <!--<EditText-->
+        <!--android:id="@+id/et_input"-->
+        <!--android:hint="please input"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="#00ff00"/>-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
